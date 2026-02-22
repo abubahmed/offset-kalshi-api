@@ -22,5 +22,6 @@ async function orchestrate({ holding }: { holding: any }) {
 }
 
 if (require.main === module) {
-  orchestrate({ holding: { ticker: "TSLA", marketValue: 500 } }).catch(console.error);
+  orchestrate({ holding: { ticker: "GOOG", marketValue: 500 } }).catch(console.error);
 }
+
