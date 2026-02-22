@@ -10,7 +10,8 @@
     "test-kalshi-terms": "npx tsx src/generateTerms.ts",
     "test-factor-discovery": "npx tsx src/factorDiscovery.ts",
     "fetch-kalshi-markets": "npx tsx src/fetchKalshiMarkets.ts",
-    "score-kalshi-links": "npx tsx src/scoreKalshiLinksForHedging.ts"
+    "score-kalshi-links": "npx tsx src/scoreKalshiLinksForHedging.ts",
+    "take-position-kalshi": "npx tsx src/takePositionKalshi.ts"
   },
   "author": "",
   "license": "ISC",
