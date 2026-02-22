@@ -1,7 +1,6 @@
 import { callLLMWithSearch } from "./clients";
 import { extractJson } from "./helpers";
-
-const BATCH_SIZE = 15;
+import { SCORE_BATCH_SIZE, TOP_K_MARKETS } from "./constants";
 
 async function scoreBatch(
   registry: any,
@@ -58,9 +57,9 @@ export async function scoreKalshiLinksForHedging(
   }));
 
   const allScores: any[] = [];
-  for (let i = 0; i < rows.length; i += BATCH_SIZE) {
-    const batch = rows.slice(i, i + BATCH_SIZE);
-    console.log(`Scoring batch ${Math.floor(i / BATCH_SIZE) + 1} (${batch.length} markets)...`);
+  for (let i = 0; i < rows.length; i += SCORE_BATCH_SIZE) {
+    const batch = rows.slice(i, i + SCORE_BATCH_SIZE);
+    console.log(`Scoring batch ${Math.floor(i / SCORE_BATCH_SIZE) + 1} (${batch.length} markets)...`);
     const batchScores = await scoreBatch(registry, security, batch);
     allScores.push(...batchScores);
   }
@@ -74,7 +73,7 @@ export async function scoreKalshiLinksForHedging(
   });
   console.log(`Total scored: ${scoredMarkets.length}`);
   scoredMarkets.sort((a: any, b: any) => (b.score ?? 0) - (a.score ?? 0));
-  return scoredMarkets.slice(0, 3);
+  return scoredMarkets.slice(0, TOP_K_MARKETS);
 }
 
 async function main() {

@@ -1,5 +1,6 @@
 import { callLLMWithSearch } from "./clients";
 import { extractJson } from "./helpers";
+import { FACTOR_MIN, FACTOR_MAX, CONFIDENCE_EXIT_THRESHOLD, MAX_REFINEMENT_ITERATIONS } from "./constants";
 
 // ─── Step 1: Broad Discovery ──────────────────────────────────────────────────
 
@@ -17,7 +18,7 @@ Run these searches:
 - Other searches that are necessary to identify key drivers
 - You are also allowed to use prior knowledge of the ticker and/or sector to identify key drivers
 
-Synthesize your findings into a factor registry. Return around 3-5 factors — the most material drivers only. These drivers should capture most or all of the upside and downside potential of the security.
+Synthesize your findings into a factor registry. Return around ${FACTOR_MIN}-${FACTOR_MAX} factors — the most material drivers only. These drivers should capture most or all of the upside and downside potential of the security.
 
 Return this exact JSON:
 {
@@ -66,7 +67,7 @@ Then update the registry. You have full permission to:
 - ADD new factors uncovered during targeted research
 - OTHER actions that are necessary to refine the registry (note you are mutating the registry all at once, so you have permission to reshape it according to the best of your judgment)
 
-Keep the registry to around 3-5 factors total; merge or drop lower-priority ones to stay in range. These drivers should capture most or all of the upside and downside potential of the security.
+Keep the registry to around ${FACTOR_MIN}-${FACTOR_MAX} factors total; merge or drop lower-priority ones to stay in range. These drivers should capture most or all of the upside and downside potential of the security.
 
 Scoring:
 - salience: how much could this move the stock (0.0–1.0)
@@ -173,7 +174,7 @@ export function shouldExit(
     return { exit: true, reason: "Registry stabilized — no changes in this iteration" };
   }
 
-  const allHighConfidence = registry.factors.every((f: any) => f.confidence > 0.75);
+  const allHighConfidence = registry.factors.every((f: any) => f.confidence > CONFIDENCE_EXIT_THRESHOLD);
   if (allHighConfidence && registry.factors.length > 0) {
     return { exit: true, reason: "All factors have confidence > 0.75" };
   }
@@ -185,7 +186,7 @@ export function shouldExit(
 
 export async function discoverFactors(
   holding: any,
-  maxRefinementIterations = 2
+  maxRefinementIterations = MAX_REFINEMENT_ITERATIONS
 ): Promise<any> {
   console.log(`\nStarting factor discovery for ${holding.ticker}...`);
 

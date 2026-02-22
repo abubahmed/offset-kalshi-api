@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import OpenAI from "openai";
+import { KALSHI_RESULTS_PER_QUERY } from "./constants";
 
 dotenv.config();
 
@@ -70,7 +71,7 @@ export async function searchKalshiMarkets(query: string) {
     throw new Error(`Kalshi search failed: ${response.status} ${response.statusText}`);
   }
   const data = await response.json();
-  return data["current_page"].slice(0, 10);
+  return data["current_page"].slice(0, KALSHI_RESULTS_PER_QUERY);
 }
 
 const main = async () => {

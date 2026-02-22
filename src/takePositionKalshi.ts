@@ -1,5 +1,6 @@
 import { callLLMWithSearch } from "./clients";
 import { extractJson } from "./helpers";
+import { HEDGE_RATIO } from "./constants";
 
 async function decideHedgeForEvent(
   security: any,
@@ -96,6 +97,20 @@ export async function takePositionKalshi(
   return results;
 }
 
+export function addHedgeAmounts(
+  positions: any[],
+  holding: { marketValue: number }
+): any[] {
+  const securityValue = holding.marketValue ?? 0;
+  const totalHedgeBudget = securityValue * HEDGE_RATIO;
+  const perPosition = positions.length > 0 ? totalHedgeBudget / positions.length : 0;
+
+  return positions.map((p) => ({
+    ...p,
+    hedge_amount_usd: Math.round(perPosition * 100) / 100,
+  }));
+}
+
 async function main() {
   const { generateKalshiSearchTerms } = await import("./generateTerms");
   const { discoverFactors } = await import("./factorDiscovery");
@@ -112,7 +127,8 @@ async function main() {
     markets
   );
   const positions = await takePositionKalshi(normalizedPosition, scored);
-  console.log("\nPositions:", JSON.stringify(positions, null, 2));
+  const withAmounts = addHedgeAmounts(positions, normalizedPosition);
+  console.log("\nPositions:", JSON.stringify(withAmounts, null, 2));
 }
 
 if (require.main === module) {
