@@ -1,29 +1,3 @@
-export function extractJson<T = unknown>(message: string): T {
-  const clean = message
-    .replace(/^\s*```(?:json)?\s*\n?/i, "")
-    .replace(/\n?```\s*$/gm, "")
-    .trim();
-
-  const firstObj = clean.indexOf("{");
-  const firstArr = clean.indexOf("[");
-
-  const useObject =
-    firstArr === -1 ||
-    (firstObj !== -1 && firstObj < firstArr);
-
-  if (useObject && firstObj !== -1) {
-    const end = findMatchingBrace(clean, firstObj, "{", "}");
-    if (end !== -1) return JSON.parse(clean.slice(firstObj, end + 1)) as T;
-  }
-
-  if (!useObject && firstArr !== -1) {
-    const end = findMatchingBrace(clean, firstArr, "[", "]");
-    if (end !== -1) return JSON.parse(clean.slice(firstArr, end + 1)) as T;
-  }
-
-  return JSON.parse(clean) as T;
-}
-
 function findMatchingBrace(
   str: string,
   start: number,
@@ -39,4 +13,29 @@ function findMatchingBrace(
     }
   }
   return -1;
+}
+
+export function extractJson<T = unknown>(message: string): T {
+  const clean = message
+    .replace(/^\s*```(?:json)?\s*/i, "")
+    .replace(/\s*```\s*$/i, "")
+    .trim();
+
+  const firstObj = clean.indexOf("{");
+  const firstArr = clean.indexOf("[");
+
+  const useObject =
+    firstArr === -1 || (firstObj !== -1 && firstObj < firstArr);
+
+  if (useObject && firstObj !== -1) {
+    const end = findMatchingBrace(clean, firstObj, "{", "}");
+    if (end !== -1) return JSON.parse(clean.slice(firstObj, end + 1)) as T;
+  }
+
+  if (!useObject && firstArr !== -1) {
+    const end = findMatchingBrace(clean, firstArr, "[", "]");
+    if (end !== -1) return JSON.parse(clean.slice(firstArr, end + 1)) as T;
+  }
+
+  throw new Error("No valid JSON object or array found");
 }

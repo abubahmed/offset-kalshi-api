@@ -1,4 +1,4 @@
-import { scoreKalshiLinksForHedging } from "./index";
+import { scoreKalshiLinksForHedging } from "./scoreKalshiLinksForHedging";
 import { normalizedPosition } from "./plaid";
 
 const testLinks = [
