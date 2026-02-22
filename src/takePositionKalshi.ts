@@ -40,7 +40,7 @@ Task: Choose the single best sub-market to hedge the security, and decide hedge 
 
 The direction we take should be inverse to whatever will inversely correlate to an increase to the security's price. Take a position that would be damaging to the security's price or stability if it happens. Do not take a position that would benefit the security's price or stability if it happens.
 
-For example, if the prediction market is "Apple releases new product", and the security is AAPL, we should take a "no" stance on the market. Apple not releasing a new product would be damaging to the security's price and stability.
+For example, if the prediction market is "Company releases new product", and the security is XXXX, we should take a "no" stance on the market. Company not releasing a new product would be damaging to the security's price and stability.
 
 Return this JSON only:
 {

@@ -33,7 +33,7 @@ function extractText(response: {
 
 export async function callLLMMini(
   prompt: string,
-  system: string = "You are a financial research analyst. Use prior knowledge to answer the question."
+  system: string = "You are a financial research analyst. Use prior knowledge to answer the question. Only return JSON. Do not return any other text or markdown other than the JSON. Do not include introductory/closing text or any other text before or after the JSON."
 ): Promise<string> {
   const response = await openai.responses.create({
     model: "gpt-4o",
@@ -47,7 +47,7 @@ export async function callLLMMini(
 
 export async function callLLMWithSearch(
   prompt: string,
-  system: string = "You are a financial research analyst. Search thoroughly before responding."
+  system: string = "You are a financial research analyst. Search thoroughly before responding. Only return JSON. Do not return any other text or markdown other than the JSON. Do not include introductory/closing text or any other text before or after the JSON."
 ): Promise<string> {
   const response = await openai.responses.create({
     model: "gpt-4o",

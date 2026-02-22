@@ -23,10 +23,15 @@ Kalshi prediction markets to score:
 ${JSON.stringify(rows, null, 2)}
 
 Scoring rules:
-- Score each market from 0 to 1: likelihood the market can hedge the security's price. If creating a good hedge relationship is difficult or unlikely, give it a low score. If a market is likely to be highly correlated with the price of the security, give it a high score. If a market is likely to be uncorrelated with the price of the security, give it a score closer to 0.5. For example, a good hedge against holdings in AAPL is a predictive market that attempts to predict if Apple's earnings next quarter will be higher or lower than expected.
-- Higher score = stronger inverse correlation. Example: holdings in AAPL are inversely correlated with a downside position on "Apple releases new product" (for example, the market for "Apple releases new product" will rise if AAPL rises, so a downside position on the market will hedge the downside of AAPL). That is a high-score hedge.
-- Lower score = weak or no clear inverse relationship. Hard-to-hedge items get a low score.
+- Score each market from 0 to 1.
+- Higher score = better hedge relationship.
+- Lower score = worse hedge relationship.
 - Use the exact "event_ticker" values from the list above so we can match responses.
+
+For something to have a good hedge relationship, it should be highly correlated with the security's price. Either a yes or no position on that market should be highly correlated with the security's price.
+
+If the market is not highly correlated with the security's price, it should have a score closer to 0.
+If the market is highly correlated with the security's price, it should have a score closer to 1.
 
 Return this JSON only:
 {

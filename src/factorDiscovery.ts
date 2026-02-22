@@ -237,8 +237,7 @@ const main = async () => {
     ticker: "AAPL",
   };
   const registry = await discoverFactors(holding);
-  const factors = registry.factors;
-  console.log(JSON.stringify(registry, null, 2));
+  console.log(JSON.stringify(registry.factors, null, 2));
 }
 
 if (require.main === module) {
